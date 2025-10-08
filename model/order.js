@@ -11,6 +11,14 @@ const orderItemSchema = new mongoose.Schema({
     image: String,
     price: Number,
     priceNumber: String,
+    size: {
+        type: [String],
+        default: []
+    },
+    color: {
+        type: [String],
+        default: []
+    },
     quantity: {
         type: Number,
         required: true,
@@ -46,6 +54,7 @@ const orderSchema = new mongoose.Schema({
     paymentStatus: {
         type: String,
         enum: ['Pending', 'Paid', 'Failed', 'Refunded'],
+        default: "pending"
     },
     deliveryStatus: {
         type: String,
@@ -100,6 +109,8 @@ function validateOrder(order) {
             name: Joi.string().required(),
             image: Joi.string().required(),
             price: Joi.number().required(),
+            size: Joi.array().item(Joi.string()),
+            color: Joi.array().item(Joi.string()),
             quantity: Joi.number().min(1).required(),
             subTotal: Joi.number().required()
             })

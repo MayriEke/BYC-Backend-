@@ -10,6 +10,8 @@ const cartItemSchema = new mongoose.Schema({
     image: String,
     price: Number,
     productNumber: String,
+    size: [String],
+    color: [String],
     quantity:{
         type: Number,
         required: true,
@@ -76,6 +78,9 @@ function validateCart(cart){
             image: Joi.string().required(),
             price: Joi.number().required(),
             productNumber: Joi.string().required(),
+            price: Joi.number().required(),
+            size: Joi.array().item(Joi.string()).default([]),
+            color: Joi.array().item(Joi.string()).default([]),
             subtotal: Joi.number().required(),
             quantity: Joi.number().required()
         }),

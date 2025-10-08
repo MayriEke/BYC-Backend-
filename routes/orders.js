@@ -16,9 +16,11 @@ router.post('/create', async (req, res) => {
                 orderId: order._id.toString()
             }
         },
-        {headers:{
+        { 
+            headers:{
             Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
-        }}
+             }
+        }
     )
     order.paymentReference = response.data.data.paymentReference
     await order.save()

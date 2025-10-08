@@ -35,6 +35,8 @@ router.post("/", async (req, res) => {
         image: product.image,
         price: product.price,
         productNumber: product.productNumber,
+        color: p.color|| [],
+        size: p.size || [],
         quantity: p.quantity,
         subtotal: product.price * p.quantity, // match schema
       });

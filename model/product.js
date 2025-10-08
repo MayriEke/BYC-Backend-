@@ -43,7 +43,9 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: 3,
         max: 1000
-    }
+    },
+    size: [String],
+    color: [String]
 })
 
 const Product = mongoose.model('Product', productSchema);
@@ -58,6 +60,8 @@ function validateProduct(product) {
         categoryId: Joi.string().required(),
         rating: Joi.string(),
         numberInStock: Joi.number().min(10).max(1000).required(),
+        size: Joi.array().items(Joi.string()).optional(),
+        color: Joi.array().items(Joi.string()).optional()
     }
     return Joi.validate(product, schema)
 }

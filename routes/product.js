@@ -26,6 +26,8 @@ router.post("/", async (req, res) => {
       description: req.body.description,
       productNumber: req.body.productNumber,
       numberInStock: req.body.numberInStock,
+      size: req.body.size,
+      color: req.body.color,
       category: {
         _id: category._id,
         name: category.name,
@@ -42,10 +44,10 @@ router.post("/", async (req, res) => {
 router.put('/:id', async (req, res) => {
   console.log("Incoming request body:", req.body);
     const {error} = validate(req.body);
-    if (error) return res.send(404).send(error.details[0].message)
+    if (error) return res.send(404).json(error.details[0].message)
 
     const category = await Category.findById(req.body.categoryId);
-    if(!category) return res.status(400).send("Invalid category id");
+    if(!category) return res.status(400).json("Invalid category id");
     
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
     name: req.body.name,
@@ -54,29 +56,41 @@ router.put('/:id', async (req, res) => {
     image: req.body.image,
     numberInStock: req.body.numberInStock,
     productNumber: req.body.productNumber,
+    size: req.body.size,
+    color: req.body.color,
     category: {
           _id: category._id,
           name: category.name
       },
-    rating: req.body.rating || '',
+    rating: req.body.rating || "",
   }, 
   {new: true}
   );
 
-  if(!updatedProduct) return res.status(404).send('The product with the given ID was not found.')
+  if(!updatedProduct) return res.status(404).json('The product with the given ID was not found.')
         res.json({product: updatedProduct, success: true, message: 'Product updated successfully'});
 });
 
 router.delete('/:id', async (req, res) => {
     const product = await Product.findByIdAndDelete(req.params.id)
-    if(!product) return res.status(404).send('The product with the given ID was not found')
+    if(!product)
+       return res.status(404).json({
+      success: false,
+      message: 'The product with the given ID was not found'
+    })
 
-    res.send(product)
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully!',
+      data: product
+    });
+
+    // res.send(product) //
 });
 
 router.get('/:id', async (req, res) => {
     const product = await Product.findById(req.params.id)
-    if(!product) return res.status(404).send('The product with the given ID was not found')
+    if(!product) return res.status(404).json('The product with the given ID was not found')
 
     res.send(product)
 });
