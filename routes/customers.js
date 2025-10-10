@@ -9,7 +9,7 @@ router.get('/', async(req, res) => {
 
 router.post('/', async(req, res) => {
     const {error} = validate(req.body);
-    if(error) return res.status(400).send(error.details[0].message)
+    if(error) return res.status(400).json(error.details[0].message)
 
         let customer = new Customer({
             name: req.body.name,
@@ -40,20 +40,20 @@ router.put('/:id', async(req, res) => {
             phone: req.body.phone,
             email: req.body.email,
         }, {new: true});
-        if (!customer) return res.status(404).send('customer not found')
+        if (!customer) return res.status(404).json('customer not found')
             res.send(customer)
 });
 
 router.delete('/', async(req, res) => {
     const {error} = validate(req.body);
-    if (error) return res.status(404).send(error.details[0].message)
+    if (error) return res.status(404).json(error.details[0].message)
 
     const customer = await Customer.findByIdAndUpdate(req.params.id, {
         name: req.body.name,
         isGold: req.body.isGold, 
         phone: req.body.phone
     }, {new: true});
-    if(!customer) return res.status(404).send('customer with the given ID was not found.')
+    if(!customer) return res.status(404).json('customer with the given ID was not found.')
         res.send(customer)
 });
 
